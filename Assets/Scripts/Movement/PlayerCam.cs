@@ -7,6 +7,11 @@ public class PlayerCam : MonoBehaviour
     [SerializeField] private float sensY = 0.1f;
     [SerializeField] private Transform orientation;
 
+    [Header("Crouch")]
+    [SerializeField] private float crouchLerpSpeed = 10f;
+    private float targetYHeight;
+    private bool targetHeightSet = false;
+
     private float xRotation;
     float yRotation;
 
@@ -14,7 +19,6 @@ public class PlayerCam : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
     }
 
     private void Update()
@@ -36,5 +40,19 @@ public class PlayerCam : MonoBehaviour
 
         if (orientation != null)
             orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
+
+        // smoothly move toward crouch/stand height
+        if (targetHeightSet)
+        {
+            Vector3 pos = transform.localPosition;
+            pos.y = Mathf.Lerp(pos.y, targetYHeight, crouchLerpSpeed * Time.deltaTime);
+            transform.localPosition = pos;
+        }
+    }
+
+    public void SetCrouchHeight(float yOffset)
+    {
+        targetYHeight = yOffset;
+        targetHeightSet = true;
     }
 }
