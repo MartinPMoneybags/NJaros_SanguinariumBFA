@@ -11,6 +11,7 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TMP_Text promptText;
+    [SerializeField] private UnityEngine.UI.Image crosshair;
 
     private IInteractable currentInteractable;
 
@@ -65,5 +66,8 @@ public class PlayerInteraction : MonoBehaviour
 
         if (promptText.text != newText)
             promptText.text = newText;
+
+        if (crosshair != null)
+            crosshair.color = currentInteractable != null ? Color.yellow : Color.white;
     }
 }
